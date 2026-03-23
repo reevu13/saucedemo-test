@@ -34,6 +34,12 @@ export default defineConfig({
     /* Base URL to use in actions like `await page.goto('/')`. */
     baseURL: process.env.BASE_URL || 'https://www.saucedemo.com/',
 
+    launchOptions: {
+      // Slows down Playwright operations by the specified amount of milliseconds.
+      // Defaults to 0 (full speed) if the SLOW_MO env variable isn't set.
+      slowMo: process.env.SLOW_MO ? parseInt(process.env.SLOW_MO) : 0,
+    },
+
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
     
