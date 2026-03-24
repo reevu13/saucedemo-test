@@ -1,0 +1,21 @@
+# Dependencies
+node_modules/
+
+# Logs and Reports
+logs
+*.log
+npm-debug.log*
+playwright-report/
+test-results/
+reports/
+
+# Environment configurations
+.env
+.env.local
+
+# Git and OS files
+.git/
+.DS_Store
+
+# Documentation
+project_setup_log.md
