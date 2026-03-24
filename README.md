@@ -16,7 +16,7 @@ When designing this enterprise-grade testing architecture, **Playwright** was ex
 
 2. **vs. Selenium WebDriver (WebSocket vs. HTTP Protocol & Flakiness)**: 
    - Selenium relies on the traditional WebDriver protocol, which translates every single command into a discrete HTTP request. This high-overhead REST approach is inherently slower and more brittle. Playwright operates via an active WebSocket connection directly communicating over the Chrome DevTools Protocol (CDP), resulting in lightning-fast execution and bidirectional, event-driven awareness (enabling seamless network interception).
-   - Because of this bidirectional connection, Playwright uses advanced **auto-waiting** pipelines—forcing the engine to automatically pause until an element is attached, visible, stable, and ready to receive events *before* interacting. Selenium traditionally relies on explicit developer algorithms or fragile polling, leading to test flakiness (perfectly demonstrated when handling the `performance_glitch_user` persona).
+   - Because of this bidirectional connection, Playwright uses advanced **auto-waiting** pipelines, forcing the engine to automatically pause until an element is attached, visible, stable, and ready to receive events *before* interacting. Selenium traditionally relies on explicit developer algorithms or fragile polling, leading to test flakiness (perfectly demonstrated when handling the `performance_glitch_user` persona).
 
 3. **vs. WebdriverIO (Modern Tooling & API integration)**: 
    - While WebdriverIO acts as a great wrapper around the WebDriver protocol, Playwright's API is undeniably more modern, offering first-class TypeScript support natively with zero complex Babel/transpilation configurations out of the box.
