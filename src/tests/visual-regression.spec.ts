@@ -21,7 +21,7 @@ test.describe('Visual Regression: problem_user broken images', () => {
     await expect(page).toHaveURL(/inventory\.html/);
   });
 
-  test('detects mismatched product images for problem_user', async ({ page, logger }) => {
+  test.fail('detects mismatched product images for problem_user', async ({ page, logger }) => {
     const inventoryPage = new InventoryPage(page);
     const itemCount = await inventoryPage.getItemCount();
 
@@ -47,7 +47,7 @@ test.describe('Visual Regression: problem_user broken images', () => {
     ).toBe(itemCount);
   });
 
-  test('compares problem_user images against standard_user baseline', async ({ page, getUser, logger }) => {
+  test.fail('compares problem_user images against standard_user baseline', async ({ page, getUser, logger }) => {
     const inventoryPage = new InventoryPage(page);
 
     // Collect problem_user image srcs

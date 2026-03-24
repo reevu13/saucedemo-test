@@ -77,10 +77,24 @@ test.describe('Resilience', () => {
         namesBefore.push(await inventoryPage.itemName(i).innerText());
       }
 
-      // Sort Z -> A
+      // Listen for the expected error alert pop-up specifically programmed into error_user
+      let alertMessage = '';
+      page.on('dialog', dialog => {
+        alertMessage = dialog.message();
+        // Playwright auto-dismisses alerts natively, but it's best practice to explicitly accept them.
+        dialog.accept();
+      });
+
+      // Sort Z -> A (This immediately triggers the alert())
       await inventoryPage.sortBy('za');
 
-      // Capture names after sorting
+      // Assert the specific Javascript console alert surfaced to the user
+      expect(
+        alertMessage,
+        'Expected the specific Sauce Demo sorting error alert popup.'
+      ).toBe('Sorting is broken! This error has been reported to Backtrace.');
+
+      // Capture names after the broken sorting attempt
       const namesAfter: string[] = [];
       for (let i = 0; i < count; i++) {
         namesAfter.push(await inventoryPage.itemName(i).innerText());
