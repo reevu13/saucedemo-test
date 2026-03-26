@@ -21,19 +21,6 @@ export interface TestFixtures {
   getUser: (role: UserRole) => User;
 }
 
-/**
- * Our extended `test` object.
- * Import this instead of `@playwright/test`'s `test` in every spec file.
- *
- * @example
- * import { test } from '../fixtures';
- *
- * test('login works for standard user', async ({ page, logger, waits, assertions, getUser }) => {
- *   const user = getUser('standard');
- *   logger.info('Logging in', { username: user.username });
- *   // ...
- * });
- */
 export const test = base.extend<TestFixtures>({
   // Scoped to 'test' by default, so each spec gets a fresh logger instance.
   logger: async ({}, use, testInfo) => {
