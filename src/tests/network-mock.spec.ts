@@ -17,7 +17,7 @@ test.describe('Network Interception: Simulated Backend Failures', () => {
     await expect(page).toHaveURL(/inventory\.html/);
   }
 
-  test('aborts product image requests and verifies broken-image fallback', async ({ page, getUser, logger }) => {
+  test('aborts product image requests and verifies broken-image fallback', async ({ page, getUser, logger, waits }) => {
     const user = getUser('standard');
 
     await page.unrouteAll();
@@ -30,19 +30,11 @@ test.describe('Network Interception: Simulated Backend Failures', () => {
 
     logger.info('Intercepted all .jpg requests — checking image fallback state');
 
-    const images = page.locator('[data-test="inventory-item"] img.inventory_item_img');
+    const imageSelector = '[data-test="inventory-item"] img.inventory_item_img';
+    const images = page.locator(imageSelector);
     await expect(images).toHaveCount(6);
 
-    // Wait for all images to settle (either loaded or failed)
-    await images.evaluateAll(async (imgs: HTMLImageElement[]) => {
-      await Promise.all(imgs.map(img => {
-        if (img.complete) return Promise.resolve();
-        return new Promise(resolve => {
-          img.addEventListener('load', resolve);
-          img.addEventListener('error', resolve);
-        });
-      }));
-    });
+    await waits.forImagesToSettle(imageSelector);
 
     const brokenImages = await images.evaluateAll((imgs: HTMLImageElement[]) =>
       imgs.filter(img => img.naturalWidth === 0).length
@@ -52,7 +44,7 @@ test.describe('Network Interception: Simulated Backend Failures', () => {
     expect(brokenImages).toBe(6);
   });
 
-  test('fulfills product image requests with 500 status and verifies broken-image fallback', async ({ page, getUser, logger }) => {
+  test('fulfills product image requests with 500 status and verifies broken-image fallback', async ({ page, getUser, logger, waits }) => {
     const user = getUser('standard');
     let intercepted = false;
 
@@ -71,19 +63,11 @@ test.describe('Network Interception: Simulated Backend Failures', () => {
 
     logger.info('Asserting that the 500 responses produce broken-image placeholders');
 
-    const images = page.locator('[data-test="inventory-item"] img.inventory_item_img');
+    const imageSelector = '[data-test="inventory-item"] img.inventory_item_img';
+    const images = page.locator(imageSelector);
     await expect(images).toHaveCount(6);
 
-    // Wait for all images to settle (either loaded or failed)
-    await images.evaluateAll(async (imgs: HTMLImageElement[]) => {
-      await Promise.all(imgs.map(img => {
-        if (img.complete) return Promise.resolve();
-        return new Promise(resolve => {
-          img.addEventListener('load', resolve);
-          img.addEventListener('error', resolve);
-        });
-      }));
-    });
+    await waits.forImagesToSettle(imageSelector);
 
     const brokenImages = await images.evaluateAll((imgs: HTMLImageElement[]) =>
       imgs.filter(img => img.naturalWidth === 0).length
@@ -94,7 +78,7 @@ test.describe('Network Interception: Simulated Backend Failures', () => {
     expect(brokenImages).toBe(6);
   });
 
-  test('selectively aborts one product image while others load normally', async ({ page, getUser, logger }) => {
+  test('selectively aborts one product image while others load normally', async ({ page, getUser, logger, waits }) => {
     const user = getUser('standard');
     let intercepted = false;
 
@@ -112,19 +96,11 @@ test.describe('Network Interception: Simulated Backend Failures', () => {
 
     await login(page, user.username, user.password);
 
-    const images = page.locator('[data-test="inventory-item"] img.inventory_item_img');
+    const imageSelector = '[data-test="inventory-item"] img.inventory_item_img';
+    const images = page.locator(imageSelector);
     await expect(images).toHaveCount(6);
 
-    // Wait for all images to settle (either loaded or failed)
-    await images.evaluateAll(async (imgs: HTMLImageElement[]) => {
-      await Promise.all(imgs.map(img => {
-        if (img.complete) return Promise.resolve();
-        return new Promise(resolve => {
-          img.addEventListener('load', resolve);
-          img.addEventListener('error', resolve);
-        });
-      }));
-    });
+    await waits.forImagesToSettle(imageSelector);
 
     const brokenImages = await images.evaluateAll((imgs: HTMLImageElement[]) =>
       imgs.filter(img => img.naturalWidth === 0).length
