@@ -30,6 +30,3 @@ reports/
 
 # Environment Variables
 .env
-
-# Custom Project Documentation
-project_setup_log.md

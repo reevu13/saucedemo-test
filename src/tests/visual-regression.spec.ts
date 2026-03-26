@@ -2,15 +2,6 @@ import { test, expect } from '../fixtures';
 import { LoginPage } from '../pages/LoginPage';
 import { InventoryPage } from '../pages/InventoryPage';
 
-/**
- * Visual regression tests for the `problem_user`.
- *
- * The problem_user sees broken / mismatched product images on the inventory
- * page. This spec logs in as problem_user, collects every product image
- * `src` attribute, and asserts that they are all unique and point to the
- * correct per-product URL — catching the known Sauce Demo bug where
- * problem_user sees a single placeholder image repeated across all items.
- */
 test.describe('Visual Regression: problem_user broken images', () => {
 
   test.beforeEach(async ({ page, getUser }) => {

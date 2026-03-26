@@ -80,6 +80,12 @@ The framework provides comprehensive, mathematically precise verification across
 - **Defect Localization (error_user)**: Confirms the frontend `alert()` warning appears when sorting breaks, and simultaneously proves that checkout inputs silently clear `.inputValue()` state due to intentional React application bugs.
 - **Visual Regression (problem_user)**: Mathematically reads every DOM image `src` URL across multiple browser contexts and correctly flags identical placeholder garbage URLs (the "Dog in a Sauce jacket" bug) without downloading heavy, brittle pixel datasets.
 
+### 6. Experimental Test Suites (Beyond Requirements)
+The framework includes three advanced test suites demonstrating capabilities beyond standard functional UI flows:
+- **Security Automation (`security.spec.ts`)**: Integrates parameterized SQL Injection (SQLi) and DOM-based Cross-Site Scripting (XSS) payloads into the login and checkout boundaries. Actively monitors for leaked database strings via regex and creates an airtight `page.on('dialog')` trap to detect arbitrary JavaScript execution, effectively leveraging Playwright as a lightweight Dynamic Application Security Testing (DAST) tool.
+- **Accessibility Scans (`accessibility.spec.ts`)**: Integrates the `@axe-core/playwright` engine to run automated WCAG 2.1 AA compliance audits across page layouts and targeted components. Accurately flags known real-world HTML defects (e.g., the missing accessible `<label>` on the product sort `<select>` element).
+- **Network Resilience (`network-mock.spec.ts`)**: Bypasses the application's Service Worker pre-caching (`serviceWorkers: 'block'`) to intercept network traffic mid-flight via Playwright's `page.route()`. Deliberately simulates catastrophic CDN outages (hard aborts) and server errors (HTTP 500 responses) on image assets to verify the frontend's built-in fallback behaviors.
+
 ---
 
 ## Local Development Setup

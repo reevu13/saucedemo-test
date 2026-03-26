@@ -71,10 +71,6 @@ test.describe('Checkout', () => {
   });
 
   test.describe('Order Summary Math Verification', () => {
-    /**
-     * Parses a dollar amount from label text like "Item total: $29.99"
-     * or "Total: $32.39".
-     */
     function parseDollar(text: string): number {
       const match = text.match(/\$(\d+\.?\d*)/);
       if (!match) throw new Error(`Could not parse dollar amount from: "${text}"`);
