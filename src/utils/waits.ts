@@ -62,23 +62,4 @@ export class Waits {
     }
     throw new Error(`Timed out waiting for condition: "${description}" (${timeout}ms)`);
   }
-
-  /**
-   * Specifically waits for all images matching a selector to "settle"
-   * (finish loading or reach an error state). Essential for testing
-   * broken images or network interceptions where naturalWidth is checked.
-   */
-  async forImagesToSettle(selector: string): Promise<void> {
-    this.logger.debug(`Waiting for images matching "${selector}" to settle`);
-    const locators = this.page.locator(selector);
-    await locators.evaluateAll(async (imgs: HTMLImageElement[]) => {
-      await Promise.all(imgs.map(img => {
-        if (img.complete) return Promise.resolve();
-        return new Promise(resolve => {
-          img.addEventListener('load', resolve);
-          img.addEventListener('error', resolve);
-        });
-      }));
-    });
-  }
 }
