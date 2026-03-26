@@ -4,9 +4,6 @@ import { LoginPage } from '../pages/LoginPage';
 
 test.use({
   serviceWorkers: 'block',
-  launchOptions: {
-    args: ['--disk-cache-size=0'],
-  },
 });
 
 test.describe('Network Interception: Simulated Backend Failures', () => {
