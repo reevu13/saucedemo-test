@@ -11,7 +11,7 @@ test.use({
 
 test.describe('Network Interception: Simulated Backend Failures', () => {
 
-  test.describe.configure({ mode: 'serial' });
+
 
   async function login(page: Page, username: string, password: string) {
     const lp = new LoginPage(page);
@@ -23,6 +23,7 @@ test.describe('Network Interception: Simulated Backend Failures', () => {
   test('aborts product image requests and verifies broken-image fallback', async ({ page, getUser, logger }) => {
     const user = getUser('standard');
 
+    await page.unrouteAll();
     await page.route('**/*.jpg', route => {
       logger.info(`Aborting image request: ${route.request().url()}`);
       route.abort('failed');
@@ -34,6 +35,17 @@ test.describe('Network Interception: Simulated Backend Failures', () => {
 
     const images = page.locator('[data-test="inventory-item"] img.inventory_item_img');
     await expect(images).toHaveCount(6);
+
+    // Wait for all images to settle (either loaded or failed)
+    await images.evaluateAll(async (imgs: HTMLImageElement[]) => {
+      await Promise.all(imgs.map(img => {
+        if (img.complete) return Promise.resolve();
+        return new Promise(resolve => {
+          img.addEventListener('load', resolve);
+          img.addEventListener('error', resolve);
+        });
+      }));
+    });
 
     const brokenImages = await images.evaluateAll((imgs: HTMLImageElement[]) =>
       imgs.filter(img => img.naturalWidth === 0).length
@@ -47,6 +59,7 @@ test.describe('Network Interception: Simulated Backend Failures', () => {
     const user = getUser('standard');
     let intercepted = false;
 
+    await page.unrouteAll();
     await page.route('**/*.jpg', route => {
       logger.info(`Fulfilling with 500: ${route.request().url()}`);
       intercepted = true;
@@ -64,6 +77,17 @@ test.describe('Network Interception: Simulated Backend Failures', () => {
     const images = page.locator('[data-test="inventory-item"] img.inventory_item_img');
     await expect(images).toHaveCount(6);
 
+    // Wait for all images to settle (either loaded or failed)
+    await images.evaluateAll(async (imgs: HTMLImageElement[]) => {
+      await Promise.all(imgs.map(img => {
+        if (img.complete) return Promise.resolve();
+        return new Promise(resolve => {
+          img.addEventListener('load', resolve);
+          img.addEventListener('error', resolve);
+        });
+      }));
+    });
+
     const brokenImages = await images.evaluateAll((imgs: HTMLImageElement[]) =>
       imgs.filter(img => img.naturalWidth === 0).length
     );
@@ -77,6 +101,7 @@ test.describe('Network Interception: Simulated Backend Failures', () => {
     const user = getUser('standard');
     let intercepted = false;
 
+    await page.unrouteAll();
     await page.route('**/*.jpg', route => {
       const url = route.request().url();
       if (url.includes('sauce-backpack')) {
@@ -92,6 +117,17 @@ test.describe('Network Interception: Simulated Backend Failures', () => {
 
     const images = page.locator('[data-test="inventory-item"] img.inventory_item_img');
     await expect(images).toHaveCount(6);
+
+    // Wait for all images to settle (either loaded or failed)
+    await images.evaluateAll(async (imgs: HTMLImageElement[]) => {
+      await Promise.all(imgs.map(img => {
+        if (img.complete) return Promise.resolve();
+        return new Promise(resolve => {
+          img.addEventListener('load', resolve);
+          img.addEventListener('error', resolve);
+        });
+      }));
+    });
 
     const brokenImages = await images.evaluateAll((imgs: HTMLImageElement[]) =>
       imgs.filter(img => img.naturalWidth === 0).length
