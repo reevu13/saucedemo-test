@@ -15,12 +15,14 @@ export abstract class BasePage {
   readonly cartIcon: Locator;
   readonly cartBadge: Locator;
   readonly burgerMenuBtn: Locator;
+  readonly logoutLink: Locator;
 
   constructor(page: Page) {
     this.page = page;
     this.cartIcon = page.locator('[data-test="shopping-cart-link"]');
     this.cartBadge = page.locator('[data-test="shopping-cart-badge"]');
     this.burgerMenuBtn = page.locator('#react-burger-menu-btn');
+    this.logoutLink = page.locator('#logout_sidebar_link');
   }
 
   /** Navigate directly to a relative path on the Sauce Demo base URL. */
@@ -41,5 +43,13 @@ export abstract class BasePage {
   /** Opens the side navigation menu. */
   async openMenu(): Promise<void> {
     await this.burgerMenuBtn.click();
+  }
+
+  /**
+   * Clicks the logout link in the sidebar.
+   * Note: The menu must be open for this link to be visible/interactable.
+   */
+  async logout(): Promise<void> {
+    await this.logoutLink.click();
   }
 }

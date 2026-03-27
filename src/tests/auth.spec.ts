@@ -125,7 +125,7 @@ test.describe('Authentication', () => {
       await inventoryPage.openMenu();
 
       logger.info('Clicking logout');
-      await page.locator('#logout_sidebar_link').click();
+      await inventoryPage.logout();
 
       logger.info('Verifying redirect back to login page');
       await expect(page).toHaveURL(/saucedemo\.com\/?$/);
