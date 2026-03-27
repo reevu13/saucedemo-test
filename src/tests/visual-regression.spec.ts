@@ -19,8 +19,7 @@ test.describe('Visual Regression: problem_user broken images', () => {
     logger.info(`Found ${itemCount} inventory items, collecting image src attributes`);
 
     // Collect every product image src
-    const imgSrcs: string[] = await page
-      .locator('[data-test="inventory-item"] img.inventory_item_img')
+    const imgSrcs: string[] = await inventoryPage.inventoryItemImages
       .evaluateAll((imgs: HTMLImageElement[]) => imgs.map(img => img.src));
 
     logger.info('Image src values collected', imgSrcs);
@@ -42,8 +41,7 @@ test.describe('Visual Regression: problem_user broken images', () => {
     const inventoryPage = new InventoryPage(page);
 
     // Collect problem_user image srcs
-    const problemSrcs: string[] = await page
-      .locator('[data-test="inventory-item"] img.inventory_item_img')
+    const problemSrcs: string[] = await inventoryPage.inventoryItemImages
       .evaluateAll((imgs: HTMLImageElement[]) => imgs.map(img => img.src));
 
     logger.info('problem_user image srcs', problemSrcs);
@@ -59,8 +57,8 @@ test.describe('Visual Regression: problem_user broken images', () => {
     await stdLoginPage.login(standardUser.username, standardUser.password);
     await expect(stdPage).toHaveURL(/inventory\.html/);
 
-    const standardSrcs: string[] = await stdPage
-      .locator('[data-test="inventory-item"] img.inventory_item_img')
+    const stdInventoryPage = new InventoryPage(stdPage);
+    const standardSrcs: string[] = await stdInventoryPage.inventoryItemImages
       .evaluateAll((imgs: HTMLImageElement[]) => imgs.map(img => img.src));
 
     logger.info('standard_user image srcs', standardSrcs);

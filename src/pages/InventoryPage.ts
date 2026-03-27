@@ -12,12 +12,14 @@ export class InventoryPage extends BasePage {
   // ── Locators ───────────────────────────────────────────────────────────────
   readonly pageTitle: Locator;
   readonly inventoryItems: Locator;
+  readonly inventoryItemImages: Locator;
   readonly sortDropdown: Locator;
 
   constructor(page: Page) {
     super(page);
     this.pageTitle      = page.locator('[data-test="title"]');
     this.inventoryItems = page.locator('[data-test="inventory-item"]');
+    this.inventoryItemImages = page.locator('[data-test="inventory-item"] img.inventory_item_img');
     this.sortDropdown   = page.locator('[data-test="product-sort-container"]');
   }
 

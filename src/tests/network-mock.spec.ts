@@ -1,6 +1,7 @@
 import { test, expect } from '../fixtures';
 import type { Page } from '@playwright/test';
 import { LoginPage } from '../pages/LoginPage';
+import { InventoryPage } from '../pages/InventoryPage';
 
 test.use({
   serviceWorkers: 'block',
@@ -44,7 +45,8 @@ test.describe('Network Interception: Simulated Backend Failures', () => {
 
     logger.info('Intercepted all .jpg requests — checking image fallback state');
 
-    const images = page.locator('[data-test="inventory-item"] img.inventory_item_img');
+    const inventoryPage = new InventoryPage(page);
+    const images = inventoryPage.inventoryItemImages;
     await expect(images).toHaveCount(6);
 
     await waitForImagesToSettle(images);
@@ -76,7 +78,8 @@ test.describe('Network Interception: Simulated Backend Failures', () => {
 
     logger.info('Asserting that the 500 responses produce broken-image placeholders');
 
-    const images = page.locator('[data-test="inventory-item"] img.inventory_item_img');
+    const inventoryPage = new InventoryPage(page);
+    const images = inventoryPage.inventoryItemImages;
     await expect(images).toHaveCount(6);
 
     await waitForImagesToSettle(images);
@@ -108,7 +111,8 @@ test.describe('Network Interception: Simulated Backend Failures', () => {
 
     await login(page, user.username, user.password);
 
-    const images = page.locator('[data-test="inventory-item"] img.inventory_item_img');
+    const inventoryPage = new InventoryPage(page);
+    const images = inventoryPage.inventoryItemImages;
     await expect(images).toHaveCount(6);
 
     await waitForImagesToSettle(images);
